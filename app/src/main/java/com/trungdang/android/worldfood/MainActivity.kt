@@ -1,43 +1,34 @@
 package com.trungdang.android.worldfood
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.trungdang.android.worldfood.ui.theme.WorldFoodTheme
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            WorldFoodTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
+
+        //Set the status bar and navigation bar like YouTube app.
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                setTheme(R.style.Theme_WorldFoodDark)
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                setTheme(R.style.Theme_WorldFoodLight)
+                val controller: WindowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.decorView)
+                controller.apply {
+                    isAppearanceLightNavigationBars = true
+                    isAppearanceLightStatusBars = true
                 }
             }
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    WorldFoodTheme {
-        Greeting("Android")
+        val appContainer = (application as WorldFoodApplication).appContainer
+        setContent {
+            WorldFoodApp(appContainer = appContainer)
+        }
     }
 }
