@@ -30,7 +30,7 @@ fun VideoPlayer() {
     val context = LocalContext.current
 
     val testing = remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     val playWhenReady = rememberSaveable {
